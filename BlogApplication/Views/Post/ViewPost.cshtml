@@ -1,0 +1,35 @@
+﻿@using System.Net.Mime
+@using System.Reflection
+@using System.Web.UI.WebControls
+@using BlogApplication.Extensions
+@using BlogApplication.Models
+@model BlogApplication.Models.PostViewModel
+@{
+    ViewBag.Title = @Model.Title;
+}
+
+<div class="container">
+    <div class="row">
+        <h2>@Model.Title<small class="pull-right">@Model.Created.ToShortDateString()</small></h2>
+    </div>
+    <div class="row">
+        <p class="lead">
+            @Model.Introduction
+        </p>
+    </div>
+    <div class="row">
+        @Model.Content
+    </div>
+    @if (Request.IsAuthenticated)
+    {
+        <div class="row">
+            @using (Html.BeginForm("DeletePost", "Post", FormMethod.Post, new { @class = "form create-post-form", role = "form" }))
+            {
+                <input type="hidden" value="@Model.PostId" name="id" />
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <input type="submit" value="Slett innlegg" class="btn btn-sm btn-danger" />
+            }
+
+        </div>
+    }
+</div>

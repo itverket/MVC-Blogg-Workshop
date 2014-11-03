@@ -1,0 +1,14 @@
+﻿@model BlogApplication.Models.AboutInformationViewModel
+@{
+    ViewBag.Title = "Om meg";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Om meg</h2>
+    </div>
+    <div class="row">
+        @Html.LabelFor(m => m.FirstName, "Fornavn: ")
+        @Html.DisplayFor(m => m.FirstName)
+    </div>
+</div>
