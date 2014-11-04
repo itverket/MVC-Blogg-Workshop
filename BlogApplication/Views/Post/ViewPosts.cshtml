@@ -26,14 +26,14 @@
         }
 
         <div class="row">
-            @if(@Model.PrevPageExists)
+            @if(@Model.PreviousPageExists)
             {
-                @Html.ActionLink("Forrige side", "ViewPosts", "Post", new { startPos = Model.CurrentPos - 10 }, null)
+                @Html.ActionLink("Forrige side", "ViewPosts", "Post", new { startPos = Model.PreviousPageStartPosition }, null)
             }
 
             @if(@Model.NextPageExists)
             {
-                @Html.ActionLink("Neste side", "ViewPosts", "Post", new { startPos = Model.CurrentPos + 10 }, null)
+                @Html.ActionLink("Neste side", "ViewPosts", "Post", new { startPos = Model.NextPageStartPosition }, new{@class = "pull-right"})
             }
             
         </div>

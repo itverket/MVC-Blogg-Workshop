@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Linq;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -14,18 +15,20 @@ namespace BlogApplication.Controllers
     public class PostController : Controller
     {
         private readonly PostRepository _postRepository = new PostRepository();
-
+        private readonly int _postsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["PostsPerPage"]);
         // GET: Post
         public ActionResult ViewPosts(int startPos = 0)
         {
-            var remainingPosts = _postRepository.GetAllPosts().Skip(startPos + 10).ToList();
-            var posts = _postRepository.GetPostsInRange(startPos, 10).ToList();
+            var remainingPosts = _postRepository.GetAllPosts().Skip(startPos + _postsPerPage).ToList();
+            var posts = _postRepository.GetPostsInRange(startPos, _postsPerPage).ToList();
 
             var model = new ViewPostsViewModel
             {
                 CurrentPos = startPos,
-                PrevPageExists = startPos >= 10,
+                PreviousPageExists = startPos >= _postsPerPage,
+                PreviousPageStartPosition = startPos >= _postsPerPage ? startPos-_postsPerPage : 0,
                 NextPageExists = remainingPosts.Any(),
+                NextPageStartPosition = remainingPosts.Any() ? startPos + _postsPerPage: startPos,
                 Posts = posts.Select(x => new PostViewModel
                 {
                     Content = x.Content,

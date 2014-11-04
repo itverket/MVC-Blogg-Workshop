@@ -13,7 +13,7 @@ namespace BlogApplication
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute("Home", "", new { controller = "Post", action = "ViewPosts", startPos = 0 });
+            routes.MapRoute("Home", "", new { controller = "Post", action = "ViewPosts" });
 
             routes.MapRoute(
                 name: "Default",
