@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using ApplicationModel;
 using ApplicationModel.Repositories;
 using BlogApplication.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace BlogApplication.Controllers
 {
@@ -26,5 +27,25 @@ namespace BlogApplication.Controllers
            
             return View(model);
         }
+
+        [HttpGet]
+        public ActionResult EditAbout()
+        {
+            var repository = new AboutRepository();
+            var aboutInformation = repository.GetAboutInformation();
+            if (aboutInformation == null)
+            {
+                return View(new AboutInformationViewModel());
+            }
+            var model = new AboutInformationViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EditAbout(AboutInformationViewModel viewmodel)
+        {
+            return null;
+        }
+    
     }
 }

@@ -253,7 +253,6 @@ public ActionResult EditAbout()
     <button class="showSolution btn btn-xs btn-warning">Vis løsning</button>
     <pre class="solution">
 [HttpPost]
-[Authorize]
 public ActionResult EditAbout(AboutInformationViewModel viewmodel)
 {
         _repository.EditAboutInformation(new AboutInformation
