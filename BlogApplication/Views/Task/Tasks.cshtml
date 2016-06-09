@@ -443,7 +443,7 @@ else
     <div class="task">
         Vi har nå ett ganske minimalt prosjekt. Dere vil se at det under en folder som heter "App_Start" ligger en klasse som heter "WebApiConfig". Dette er en klasse hvor det er ment at man gjør oppstartskonfigurasjon. Dere vil også se at det under Global.asax ligger en klasse som heter Global.asax.cs. .NET vil automatisk lete etter noen metoder i Global.asax.cs (blant annet Application_Start() og Application_End() ), så man kan gjøre konfiguering her. Du vil se at i vår Global.asax.cs er det en Application_Start() metode allerede, som kjører WebApiConfig.Register() metoden.
 
-        Nå må vi gjøre ett par ting for å få det nye prosjektet til å spille pent med databasen vår. Gjør følgende:
+        Nå må vi gjøre ett par ting for å få det nye prosjektet til å spille pent med databasen vår. Gjør følgende:<br />
 
         1) Høyreklikk på hele solutionen, og velge "Manage NuGet packages for solution"<br />
         2) Gå på "Installed"-taben<br />
@@ -524,7 +524,7 @@ public class PostModel
 {
     public PostModel()
     {
-        Comments = new List<CommentModel>();
+        Comments = new List&lt;CommentModel&gt;();
     }
     public int PostId { get; set; }
     public string Title { get; set; }
@@ -532,7 +532,7 @@ public class PostModel
     public string Content { get; set; }
     public DateTime Created { get; set; }
     public DateTime Edited { get; set; }
-    public List<CommentModel> Comments { get; set; }
+    public List&lt;CommentModel&gt; Comments { get; set; }
 }
 public class CommentModel
 {
@@ -600,7 +600,7 @@ public List<Post> SearchPostTitles(string queryString)
     var posts = _dbContext.Posts.Where(post => post.Title.Contains(queryString)).ToList();
     foreach(var post in posts)
     {
-        post.Comments = post.Comments ?? new List<Comment>();
+        post.Comments = post.Comments ?? new List&lt;Comment&gt;();
     }
     return posts;
 }
@@ -611,7 +611,7 @@ public List<PostModel> Search(string queryString)
 {
     var repository = new PostRepository();
     var posts = repository.SearchPostTitles(queryString);
-    var model = new List<PostModel>();
+    var model = new List&lt;PostModel&gt;();
     if (posts != null)
     {
         foreach(var post in posts)
