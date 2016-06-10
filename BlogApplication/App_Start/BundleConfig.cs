@@ -29,9 +29,18 @@ namespace BlogApplication
                       "~/Content/datepicker.css",
                       "~/Content/site.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+                        "~/Scripts/knockout-3.4.0.js ",
+                        "~/Scripts/knockout.viewmodel.2.0.3.min.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/bundles/app").IncludeDirectory(
+                        "~/Scripts/ViewModels",
+                        "*.js", true));
+
+
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
-            BundleTable.EnableOptimizations = true;
         }
     }
 }
