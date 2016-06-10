@@ -641,6 +641,205 @@ public List<PostModel> Search(string queryString)
 </div>
 
 <div class="row">
+    <h3>Oppgave 7: Knockout</h3>
+    <div class="task">
+       Vi leker oss litt med knockout. For Person.cshtml er det lagt til en knockout viewmodel, som vi kan bruke til dette.
+    </div>
+</div>
+
+<div class="row">
+    <h4>Oppgave 7a</h4>
+    <div class="task">
+        Foreløpig er det bare fornavnet som blir vist, men nå ønsker vi å vise både fornavn og etternavn. I tillegg til en ren visning av navnene vil vi legge til mulighet for å redigere hver av dem. På denne måten kan vi se at bindingen fungerer som den skal.
+    </div>
+    <button class="showHint btn btn-xs btn-primary">Vis Hint</button>
+    <p class="hint">
+        Knockout.Viewmodel sørger for at alle properties fra PersonViewModel.cs er mappet til PersonViewModel.js. Dette betyr at vi har tilgang til f.eks. self.FirstName selv om det ikke er definert i javascriptet. Dermed kan vi, uten å gjøre endringer i PersonViewModel.js, legge til nye felter i viewet.
+    </p>
+
+    <button class="showSolution btn btn-xs btn-warning">Vis løsning</button>
+    <pre class="solution">
+    &lt;div class="container" id="person-page"&gt;
+        &lt;div class="row"&gt;
+            &lt;h2>Om meg&lt;/h2&gt;
+        &lt;/div&gt;
+        &lt;div class="row"&gt;
+            &lt;div&gt;
+                &lt;input id="firstNameInput" data-bind="textInput: FirstName" /&gt;
+            &lt;/div&gt;
+            &lt;div&gt;
+                &lt;input id="lastNameInput" data-bind="textInput: LastName" /&gt;>
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="row"&gt;
+            &lt;div&gt;
+                &lt;span data-bind="text: FirstName"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div&gt;
+                &lt;span data-bind="text: LastName">&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    </pre>
+</div>
+<div class="row">
+    <h4>Oppgave 7b</h4>
+    <div class="task">
+        Vi ønsker å vise fullt navn på personen. Legg til dette. Sjekk at fullt navn oppdateres når fornavn eller etternavn endres.
+    </div>
+    <button class="showHint btn btn-xs btn-primary">Vis Hint</button>
+    <p class="hint">
+        Lag en ko.computed-funksjon for å sette sammen fornavn og etternavn.
+    </p>
+    <button class="showSolution btn btn-xs btn-warning">Vis løsning</button>
+    <pre class="solution">
+    Legg til følgende i viewmodellen:
+
+    self.fullName = ko.computed( function() {
+        return self.FirstName() + " " + self.LastName();
+    });
+    
+    Legg til følgende i viewet:
+
+    &lt;div class="row"&gt;
+        &lt;div&gt;
+            &lt;label&gt;Fullt navn:&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;span data-bind="text: fullName"&gt;&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div>
+    </pre>
+</div>
+<div class="row">
+    <h4>Oppgave 7c</h4>
+    <div class="task">
+        Vi legger til flere detaljer om personen, i tillegg til fullt navn: Kjønn og alder.
+    </div>
+    <button class="showHint btn btn-xs btn-primary">Vis Hint</button>
+    <p class="hint">
+        Kjønn er en enum i c#, men i javascript blir den mappet som en int. Vi kan gjøre dette enkelt ved å lage en "enum" og en funksjon i javascriptet som mapper dette til en tekst som gir mening.<br/>
+        I tillegg må alder vises som f.eks. "25 år".
+    </p>
+    <button class="showSolution btn btn-xs btn-warning">Vis løsning</button>
+    <pre class="solution">
+        Legg til følgende i viewmodellen:
+        
+        self.gender = {
+            male: 1,
+            female: 2
+        };
+
+        self.genderString = ko.computed(function() {
+            switch (self.Gender()) {
+                case self.gender.male:
+                    return "Mann";
+                case self.gender.female:
+                    return "Kvinne";
+                default:
+                    return "";
+            }
+        });
+
+        self.ageString = ko.computed(function() {
+            return self.Age() + " år";
+        });
+
+         Bytt ut delen om fullt navn i viewet (fra oppgave 7b) med dette:
+
+         &lt;div class="row"&gt;
+            &lt;table&gt;
+                &lt;thead&gt;
+                    &lt;tr&gt;
+                        &lt;th style="width:150px"&gt;Fullt navn&lt;/th&gt;
+                        &lt;th style="width:70px"&gt;Kjønn&lt;/th&gt;
+                        &lt;th style="width:70px"&gt;Alder&lt;/th&gt;
+                    &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;&lt;span data-bind="text: fullName">&lt;/span&gt;&lt;/td&gt;
+                        &lt;td&gt;&lt;span data-bind="text: genderString">&lt;/span&gt;&lt;/td&gt;
+                        &lt;td&gt;&lt;span data-bind="text: ageString">&lt;/span&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+        &lt;/div&gt;
+    </pre>
+</div>
+
+<div class="row">
+    <h4>Oppgave 7d</h4>
+    <div class="task">
+        Nå vil vi vise en liste over barna til personen. Lag en enkel liste med navn og alder.
+    </div>
+    <button class="showHint btn btn-xs btn-primary">Vis Hint</button>
+    <p class="hint">
+        Vi har en property kalt Children. Dette er en liste over objekter av typen Child. Loop gjennom dette i viewet og vis detaljer for hver av dem.<br/>
+    </p>
+    <button class="showSolution btn btn-xs btn-warning">Vis løsning</button>
+    <pre class="solution">
+    &lt;div class="row"&gt;
+        &lt;table&gt;
+            &lt;thead&gt;
+                &lt;tr&gt;
+                    &lt;th style="width:70px"&gt;Navn&lt;/th&gt;
+                    &lt;th style="width:70px"&gt;Alder&lt;/th&gt;
+                &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody data-bind="foreach: Children"&gt;
+                &lt;tr&gt;
+                    &lt;td data-bind="text: FirstName"&gt;&lt;/td&gt;
+                    &lt;td data-bind="text: Age"&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+    &lt;/div&gt;
+    </pre>
+</div>
+
+<div class="row">
+    <h4>Oppgave 7e</h4>
+    <div class="task">
+        Til slutt lager vi en knapp med funksjonalitet for å kalkulere hvor mange barn personen har over en viss alder. Man skal kunne velge denne alderen. 
+    </div>
+    <button class="showHint btn btn-xs btn-primary">Vis Hint</button>
+    <p class="hint">
+        Her må vi lage et inputfelt for alder. Det må også legges til en knapp som kaller på en funksjon som bruker ko.utils-funksjoner for arrays for å finne antallet.<br/>
+        Det må opprettes en observable som kan brukes til dette.
+    </p>
+    <button class="showSolution btn btn-xs btn-warning">Vis løsning</button>
+    <pre class="solution">
+    Legg til følgende i viewmodellen:
+
+    self.minimumAge = ko.observable(0);
+
+    self.noOfChildren = ko.observable();
+
+    self.calculateNoOfChildren = function() {
+        var children = ko.utils.arrayFilter(self.Children(), function (child) {
+            return child.Age() >= self.minimumAge();
+        });
+        self.noOfChildren(children.length);
+    };
+
+    Legg til følgende i viewet:
+
+    &lt;div class="row"&gt;
+        &lt;div&gt;
+            Velg minimum alder for å regne ut antall barn over eller lik valgt alder:
+            &lt;input data-bind="value: minimumAge" style="width: 25px" /&gt;
+            &lt;button data-bind="click: calculateNoOfChildren">Go!&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            Antall barn over &lt;span data-bind="text: minimumAge"&gt;&lt;/span&gt; år er:
+            &lt;span data-bind="text: noOfChildren"&gt;&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div>
+    </pre>
+</div>
+
+<div class="row">
     <h3>Ekstra Oppgaver (for BlogApplication)</h3>
 
     <div class="task">
